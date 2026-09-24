@@ -15,7 +15,7 @@ Página para montar cardápios personalizados com a identidade da Cintra Eventos
 5. Defina o **valor** (total, por pessoa, a combinar ou sem valor), as informações gerais e as observações.
 6. Clique em **Baixar PDF**.
 
-**Salvar** guarda o cardápio neste navegador. Para reabrir, use **Meus cardápios**. Os dados da empresa (nome, telefone, e-mail, site) ficam em **Dados da empresa**, no fim do formulário.
+**Salvar** guarda o cardápio neste navegador. Para reabrir, use **Meus cardápios**. Os dados da empresa (nome, telefone, site, Instagram) ficam em **Dados da empresa**, no fim do formulário.
 
 ## Para desenvolvedores
 

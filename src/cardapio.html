@@ -341,7 +341,6 @@ details.card[open] summary{margin-bottom:14px}
       <div class="grid2">
         <div class="field"><label for="e-nome">Nome</label><input type="text" id="e-nome" data-e="nome"></div>
         <div class="field"><label for="e-tel">Telefones</label><input type="text" id="e-tel" data-e="tel"></div>
-        <div class="field"><label for="e-email">E-mail</label><input type="text" id="e-email" data-e="email"></div>
         <div class="field"><label for="e-site">Site</label><input type="text" id="e-site" data-e="site"></div>
         <div class="field"><label for="e-insta">Instagram</label><input type="text" id="e-insta" data-e="insta" placeholder="@cintraeventos"></div>
       </div>
@@ -627,7 +626,7 @@ const CONDICOES = [
   "Caso o número de convidados ultrapasse o previsto em contrato, será cobrado valor adicional por pessoa excedente.",
 ];
 const EMPRESA_PADRAO = {
-  nome: "Cintra Eventos", tel: "19 9631-5089", email: "contato@cintraeventos.com.br",
+  nome: "Cintra Eventos", tel: "19 9631-5089",
   site: "www.cintraeventos.com.br", insta: "",
 };
 
@@ -691,7 +690,7 @@ function extenso(valor) {
 const K_RASC = "cintra-cardapio-rascunho", K_SALVOS = "cintra-cardapios", K_EXTRAS = "cintra-extras", K_EMP = "cintra-empresa";
 let extras = store.get(K_EXTRAS, {});
 let EMP = Object.assign({}, EMPRESA_PADRAO, store.get(K_EMP, {}));
-delete EMP.razao; delete EMP.cnpj;
+delete EMP.razao; delete EMP.cnpj; delete EMP.email;
 
 function novoEstado() {
   return {
@@ -921,7 +920,7 @@ function capa() {
 function paginaInterna() {
   const titulo = juntar(nomesTitulo());
   const sub = [S.opcao, S.cliente.nome].filter(x => x && x.trim()).map(esc).join(" · ");
-  const foot = [EMP.nome, EMP.tel, EMP.email, EMP.site].filter(Boolean).map(esc).join(" · ");
+  const foot = [EMP.nome, EMP.tel, EMP.site].filter(Boolean).map(esc).join(" · ");
   return html(`<section class="pg in">
     <div class="in-card">
       <div class="in-head"><img src="${LOGO}" alt=""><div class="t ${titulo.length > 26 ? "sm" : ""}">${esc(titulo)}</div>${sub ? `<div class="s">${sub}</div>` : ""}</div>
