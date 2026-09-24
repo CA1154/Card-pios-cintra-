@@ -1,0 +1,1004 @@
+<title>Cardápios Cintra Eventos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Mulish:wght@400;500;600;700;800&display=swap">
+<style>
+/* ---------- Tokens da interface (tema claro / escuro) ---------- */
+:root{
+  --bg:#F2EDE2; --surface:#FFFFFF; --surface-2:#FAF6EE; --ink:#141B3D; --muted:#5F6076;
+  --line:#E0D6C2; --accent:#04145B; --accent-ink:#FFFFFF; --gold:#A8784A; --gold-soft:#F3E7D3;
+  --wine:#80141A; --focus:#C59E70; --chip-on:#04145B; --chip-on-ink:#FFFFFF;
+  --shadow:0 1px 2px rgba(20,27,61,.06),0 8px 24px rgba(20,27,61,.06);
+  --script:"Allura","Brush Script MT",cursive;
+  --serif:"Cormorant Garamond","Garamond","Times New Roman",serif;
+  --sans:"Mulish","Segoe UI",system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0B0F22; --surface:#141934; --surface-2:#1A2042; --ink:#EFE9DD; --muted:#A9A6B8;
+    --line:#2A3158; --accent:#D2AE80; --accent-ink:#0B0F22; --gold:#D2AE80; --gold-soft:#262B48;
+    --wine:#E48C91; --focus:#D2AE80; --chip-on:#D2AE80; --chip-on-ink:#0B0F22;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0B0F22; --surface:#141934; --surface-2:#1A2042; --ink:#EFE9DD; --muted:#A9A6B8;
+  --line:#2A3158; --accent:#D2AE80; --accent-ink:#0B0F22; --gold:#D2AE80; --gold-soft:#262B48;
+  --wine:#E48C91; --focus:#D2AE80; --chip-on:#D2AE80; --chip-on-ink:#0B0F22;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+
+/* ---------- Barra superior ---------- */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:1440px;margin:0 auto;padding-block:10px;padding-inline:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.brandmark{display:flex;align-items:center;gap:10px;margin-right:auto;min-width:0}
+.brandmark img{width:42px;height:42px}
+.brandmark b{display:block;font-size:15px;font-weight:800;letter-spacing:.01em}
+.brandmark span{display:block;font-size:12px;color:var(--muted)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 14px;font-weight:700;font-size:14px;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--gold)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.primary:hover{filter:brightness(1.12)}
+.btn.warn{border-color:var(--wine);color:var(--wine)}
+.btn[disabled]{opacity:.6;cursor:progress}
+.count{display:inline-block;min-width:20px;padding:0 6px;margin-left:4px;border-radius:99px;background:var(--gold-soft);font-size:12px;text-align:center}
+
+/* ---------- Layout principal ---------- */
+.shell{max-width:1440px;margin:0 auto;padding-block:20px 48px;padding-inline:16px;display:grid;grid-template-columns:minmax(0,480px) minmax(0,1fr);gap:28px;align-items:start}
+.tabs{display:none}
+@media (max-width:1000px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .tabs{display:flex;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px}
+  .tabs button{flex:1;border:0;background:transparent;border-radius:9px;padding:8px;font-weight:700;cursor:pointer;color:var(--muted)}
+  .tabs button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
+  .offstage{position:absolute!important;left:-99999px;top:0}
+}
+
+/* ---------- Editor ---------- */
+.editor{display:grid;gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+.card>h2{margin:0 0 4px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:800;display:flex;gap:10px;align-items:baseline}
+.card>h2 i{font-style:normal;color:var(--muted);font-weight:700}
+.card>p.hint{margin:0 0 14px;color:var(--muted);font-size:13px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:520px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.full{grid-column:1/-1}
+.field{display:grid;gap:5px;min-width:0}
+.field>label,.lbl{font-size:12.5px;font-weight:700;color:var(--muted)}
+.field input[type="text"],.field input[type="date"],.field input[type="tel"],.field input[type="email"],.field select,.field textarea,.sec-ed input.sec-title,.sec-ed input.sec-nota,.add input,.newsec input{
+  width:100%;border:1px solid var(--line);background:var(--surface-2);border-radius:9px;padding:9px 11px;min-width:0}
+.field textarea{resize:vertical;min-height:84px;line-height:1.45}
+.field input:disabled{opacity:.45}
+.ad{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);cursor:pointer;user-select:none}
+.ad input{accent-color:var(--gold);width:15px;height:15px}
+.lblrow{display:flex;justify-content:space-between;align-items:center;gap:8px}
+
+.mods{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.modopt{position:relative;display:grid;gap:2px;border:1px solid var(--line);border-radius:12px;padding:12px 12px 12px 14px;cursor:pointer;background:var(--surface-2)}
+.modopt input{position:absolute;opacity:0;pointer-events:none}
+.modopt .mname{font-family:var(--script);font-size:30px;line-height:1.05;color:var(--ink)}
+.modopt .mdesc{font-size:12px;color:var(--muted)}
+.modopt:has(input:checked){border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);background:var(--surface)}
+.modopt:has(input:focus-visible){outline:2px solid var(--focus);outline-offset:2px}
+
+.sec-list{display:grid;gap:12px}
+.combo{margin-top:16px;border-top:1px dashed var(--line);padding-top:14px;display:grid;gap:10px}
+.combo-add{display:flex;flex-wrap:wrap;gap:6px}
+.combo-add button{border:1px dashed var(--gold);background:transparent;border-radius:99px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer}
+.combo-add button:hover{background:var(--gold-soft)}
+.combo-row{display:grid;gap:8px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--surface-2)}
+.combo-top{display:flex;align-items:center;gap:10px}
+.combo-top .mname{font-family:var(--script);font-size:26px;line-height:1.1;margin-right:auto}
+.combo-row input[type="text"]{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:9px;padding:7px 10px;font-size:13px;min-width:0}
+.mod-tag{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-top:6px;padding-bottom:4px;border-bottom:1px solid var(--line)}
+.mod-tag b{font-family:var(--script);font-weight:400;font-size:30px;line-height:1.1}
+.badge{font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border:1px dashed var(--gold);border-radius:99px;padding:1px 8px}
+.sec-ed{border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:9px;background:var(--surface-2)}
+.sec-ed.off{opacity:.55}
+.sec-ed.off .chips,.sec-ed.off .add,.sec-ed.off .sec-nota{display:none}
+.sec-top{display:flex;align-items:center;gap:10px}
+.sec-ed input.sec-title{font-weight:800;background:transparent;border-color:transparent;padding:5px 7px;font-size:15px}
+.sec-ed input.sec-title:hover,.sec-ed input.sec-title:focus{border-color:var(--line);background:var(--surface)}
+.sec-ed input.sec-nota{font-size:13px;padding:7px 10px;background:var(--surface)}
+.sec-meta{font-size:11.5px;color:var(--muted);white-space:nowrap}
+.grp-tag{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);font-weight:800}
+.switch{position:relative;flex:none;width:38px;height:22px;cursor:pointer}
+.switch input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.switch span{position:absolute;inset:0;border-radius:99px;background:var(--line);transition:background .15s}
+.switch span::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .15s;box-shadow:0 1px 2px rgba(0,0,0,.25)}
+.switch input:checked+span{background:var(--accent)}
+.switch input:checked+span::after{transform:translateX(16px)}
+.switch input:focus-visible+span{outline:2px solid var(--focus);outline-offset:2px}
+.icon-btn{flex:none;border:0;background:transparent;color:var(--muted);font-size:20px;line-height:1;cursor:pointer;border-radius:6px;padding:2px 6px}
+.icon-btn:hover{color:var(--wine)}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chipw{display:inline-flex;align-items:stretch;max-width:100%}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:5px 11px;font-size:13px;cursor:pointer;text-align:left;line-height:1.3;max-width:100%}
+.chip:hover{border-color:var(--gold)}
+.chip.on{background:var(--chip-on);color:var(--chip-on-ink);border-color:var(--chip-on)}
+.chip.sug{border-style:dashed;border-color:var(--gold)}
+.chip.sug.on{border-style:solid}
+.chip small{margin-left:6px;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.chip.on small{color:inherit;opacity:.75}
+.chipw.rm .chip{border-top-right-radius:0;border-bottom-right-radius:0;border-right:0}
+.chip-x{border:1px solid var(--line);border-left:0;background:var(--surface);border-radius:0 99px 99px 0;padding:0 9px 0 5px;cursor:pointer;color:var(--muted);font-size:15px}
+.chipw.rm .chip.on+.chip-x{background:var(--chip-on);color:var(--chip-on-ink);border-color:var(--chip-on)}
+.chip-x:hover{color:var(--wine)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:12px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:18px;height:12px;border-radius:99px;border:1px solid var(--line)}
+.legend i.l-on{background:var(--chip-on);border-color:var(--chip-on)}
+.legend i.l-sug{border:1px dashed var(--gold)}
+
+.add,.newsec{display:flex;gap:6px}
+.add input{font-size:13px;padding:7px 10px;background:var(--surface)}
+.add button,.newsec button{flex:none;border:1px solid var(--line);background:var(--surface);border-radius:9px;padding:0 12px;font-weight:700;font-size:13px;cursor:pointer}
+.add button:hover,.newsec button:hover{border-color:var(--gold)}
+.newsec{margin-top:12px}
+details.card summary{cursor:pointer;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:800}
+details.card[open] summary{margin-bottom:14px}
+
+/* ---------- Pré-visualização ---------- */
+.preview{position:sticky;top:calc(env(safe-area-inset-top,0px) + 78px);display:grid;gap:10px;min-width:0}
+.preview-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;color:var(--muted);font-size:13px}
+.preview-head b{color:var(--ink);font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+.paperbox{position:relative;overflow:hidden;max-height:calc(100vh - 150px);overflow-y:auto;border-radius:12px;background:var(--gold-soft);padding:14px}
+@media (max-width:1000px){.preview{position:static}.paperbox{max-height:none}}
+.paperscale{position:relative}
+#paper{position:absolute;top:0;left:0;width:794px;transform-origin:top left}
+#paper .pg{margin-bottom:24px;box-shadow:0 2px 12px rgba(20,27,61,.18)}
+
+/* ---------- Modal / toast ---------- */
+.overlay{position:fixed;inset:0;background:rgba(8,10,25,.45);z-index:50;display:grid;place-items:center;padding:16px}
+.modal{background:var(--surface);border-radius:14px;width:min(560px,100%);max-height:80vh;overflow:auto;padding:20px;box-shadow:var(--shadow)}
+.modal h3{margin:0 0 12px;font-size:18px}
+.saved{display:grid;gap:8px}
+.saved-row{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.saved-row div{flex:1;min-width:0}
+.saved-row b{display:block;overflow-wrap:anywhere}
+.saved-row span{font-size:12px;color:var(--muted)}
+.empty{color:var(--muted);font-size:14px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:700;font-size:14px;z-index:60;max-width:calc(100% - 32px)}
+
+/* ================================================================
+   PAPEL DO CARDÁPIO (A4 = 794 × 1123 px) — cores fixas da marca
+   ================================================================ */
+.pg{--p-cream:#F8F3ED;--p-sand:#EBDCAB;--p-navy:#04145B;--p-gold:#C59E70;--p-gold-d:#9C7243;--p-wine:#80141A;--p-card:#FFFDF9;--p-ink:#2B2B36;--p-muted:#6F6A66;
+  position:relative;width:794px;height:1123px;overflow:hidden;background:var(--p-cream);color:var(--p-ink);font-family:var(--sans)}
+.pg em.ad{font-style:italic;color:var(--p-muted)}
+
+/* Capa */
+.cv-band{position:absolute;left:0;right:0;background:var(--p-sand)}
+.cv-band.t{top:0;height:118px}
+.cv-band.b{bottom:0;height:132px;border-top:3px solid #DDCB92}
+.cv-dots{position:absolute;top:150px;left:18px;display:grid;grid-template-columns:repeat(6,8px);gap:19px}
+.cv-dots i{width:6px;height:6px;border-radius:50%;background:var(--p-gold);opacity:.75}
+.cv-tal{position:absolute;right:26px;bottom:0;height:238px}
+.cv-body{position:absolute;top:128px;left:90px;right:90px;bottom:142px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.cv-logo{width:212px;height:212px}
+.cv-brand{margin-top:2px;font-weight:800;font-size:20px;color:var(--p-navy);letter-spacing:.01em}
+.cv-eyebrow{margin-top:18px;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--p-gold-d);font-weight:700}
+.cv-title{margin:2px 0 0;font-family:var(--script);font-weight:400;font-size:84px;line-height:1.05;color:var(--p-navy)}
+.cv-opc{font-family:var(--serif);font-size:19px;letter-spacing:.2em;text-transform:uppercase;color:var(--p-wine);font-weight:600;margin-top:2px}
+.cv-intro{margin:14px 0 0;max-width:540px;font-family:var(--serif);font-style:italic;font-size:17.5px;line-height:1.45;color:var(--p-ink)}
+.cv-ficha{margin-top:auto;width:100%;display:grid;grid-template-columns:1fr 1fr;column-gap:36px;row-gap:12px;text-align:left;border-top:1px solid var(--p-gold);padding-top:16px}
+.cv-ficha div{min-width:0}
+.cv-ficha dt{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--p-gold-d);font-weight:800}
+.cv-ficha dd{margin:1px 0 0;font-family:var(--serif);font-size:19px;line-height:1.2;color:var(--p-navy);font-weight:600;overflow-wrap:anywhere}
+.cv-ficha .wide{grid-column:1/-1}
+.cv-contact{position:absolute;left:0;right:0;bottom:48px;text-align:center;font-size:13px;color:var(--p-navy);font-weight:700;letter-spacing:.03em}
+.cv-contact span{color:var(--p-gold-d);margin:0 8px}
+
+/* Páginas internas */
+.pg.in{background:var(--p-sand)}
+.in-tal{position:absolute;right:10px;bottom:0;height:96px}
+.in-card{position:absolute;top:34px;left:34px;right:34px;bottom:34px;background:var(--p-card);border:1.5px solid var(--p-navy);display:flex;flex-direction:column;padding:26px 58px 18px}
+.in-head{display:flex;flex-direction:column;align-items:center;text-align:center;padding-bottom:10px}
+.in-head img{width:64px;height:64px}
+.in-head .t{font-family:var(--script);font-size:46px;line-height:1.05;color:var(--p-navy)}
+.in-head .t.sm{font-size:36px}
+.in-head .s{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--p-gold-d);font-weight:800}
+.flow{flex:1;overflow:hidden;display:flex;flex-direction:column}
+.blk{padding-top:14px}
+.blk.mhd{padding-top:24px;text-align:center}
+.mhd .e{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--p-wine);font-weight:800}
+.mhd .n{font-family:var(--script);font-size:52px;line-height:1.05;color:var(--p-navy)}
+.mhd .i{margin:2px auto 0;max-width:520px;font-family:var(--serif);font-style:italic;font-size:15.5px;line-height:1.4}
+.mhd .v{display:inline-block;margin-top:8px;border:1px solid var(--p-gold);padding:3px 14px;font-family:var(--serif);font-weight:700;font-size:16px;color:var(--p-navy)}
+.mhd.sug .n{color:var(--p-gold-d)}
+.cv-title.md{font-size:64px}
+.cv-title.sm{font-size:50px}
+.cv-sug{margin-top:6px;font-size:12px;letter-spacing:.08em;color:var(--p-wine);font-weight:700}
+.blk.grp{padding-top:18px;text-align:center;font-family:var(--script);font-size:40px;line-height:1.1;color:var(--p-wine)}
+.sec-h{display:flex;align-items:center;gap:14px;justify-content:center}
+.sec-h .rule{flex:1;height:1px;background:var(--p-gold)}
+.sec-h h3{margin:0;font-family:var(--serif);font-weight:700;font-size:18px;letter-spacing:.16em;text-transform:uppercase;color:var(--p-navy);text-align:center}
+.sec-n{margin-top:1px;text-align:center;font-family:var(--serif);font-style:italic;font-size:15.5px;color:var(--p-gold-d)}
+.its{margin:6px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:1fr;row-gap:2px;text-align:center;font-size:13.5px;line-height:1.5}
+.its.c2{grid-template-columns:1fr 1fr;column-gap:26px}
+.its li{overflow-wrap:anywhere}
+.val{margin-top:4px;border:1px solid var(--p-gold);background:var(--p-cream);padding:14px 20px;text-align:center}
+.val .l{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--p-gold-d);font-weight:800}
+.val .v{font-family:var(--serif);font-size:34px;font-weight:700;color:var(--p-navy);line-height:1.15}
+.val .v span{font-size:18px;font-weight:600}
+.val .x{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--p-ink)}
+.cond{margin:6px 0 0;padding:0 0 0 18px;font-size:12.5px;line-height:1.55}
+.obs{margin:6px 0 0;font-size:13px;line-height:1.55;text-align:center;white-space:pre-line}
+.in-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid var(--p-gold);padding-top:9px;margin-top:10px;font-size:10.5px;color:var(--p-navy);font-weight:600}
+.in-foot .pn{color:var(--p-gold-d);white-space:nowrap;letter-spacing:.08em}
+</style>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brandmark"><img id="ui-logo" alt=""><div><b>Cardápios Cintra</b><span>Monte, confira e baixe em PDF</span></div></div>
+    <div class="actions">
+      <button class="btn" id="b-novo" type="button">Novo</button>
+      <button class="btn" id="b-lista" type="button">Meus cardápios<span class="count" id="n-salvos">0</span></button>
+      <button class="btn" id="b-salvar" type="button">Salvar</button>
+      <button class="btn primary" id="b-pdf" type="button">Baixar PDF</button>
+    </div>
+  </div>
+</header>
+
+<main class="shell">
+  <div class="tabs full" role="tablist">
+    <button type="button" role="tab" id="t-ed" aria-selected="true">Editar</button>
+    <button type="button" role="tab" id="t-pv" aria-selected="false">Ver cardápio</button>
+  </div>
+
+  <div class="editor" id="editor">
+    <section class="card">
+      <h2>1 · Modalidade</h2>
+      <p class="hint">Cada modalidade já vem com os itens de costume marcados.</p>
+      <div class="mods" id="mods"></div>
+      <div class="grid2" style="margin-top:12px">
+        <div class="field"><label for="f-opcao">Nome da opção (opcional)</label><input type="text" id="f-opcao" data-k="opcao" placeholder="Ex.: Opção 1, Premium"></div>
+      </div>
+      <div class="combo">
+        <div><div class="lbl">Combinar com outra modalidade</div><p class="hint" style="margin:2px 0 0;color:var(--muted);font-size:13px">Com “Como sugestão” ligado, ela aparece no PDF como sugestão para complementar o cardápio. Utensílios, mão de obra e bebidas repetidos já entram desligados.</p></div>
+        <div id="combo-list" style="display:grid;gap:10px"></div>
+        <div class="combo-add" id="combo-add"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>2 · Cliente e evento</h2>
+      <p class="hint">Deixe em branco ou marque “A definir” quando ainda não souber.</p>
+      <div class="grid2">
+        <div class="field full"><label for="f-nome">Nome do cliente</label><input type="text" id="f-nome" data-k="cliente.nome" placeholder="Ex.: Isabela"></div>
+        <div class="field"><label for="f-tel">Telefone</label><input type="tel" id="f-tel" data-k="cliente.tel" placeholder="19 90000-0000"></div>
+        <div class="field"><label for="f-email">E-mail</label><input type="email" id="f-email" data-k="cliente.email" placeholder="cliente@email.com"></div>
+        <div class="field">
+          <div class="lblrow"><label for="f-data" class="lbl">Data do evento</label><label class="ad"><input type="checkbox" id="f-dataAD" data-k="ev.dataAD">A definir</label></div>
+          <input type="date" id="f-data" data-k="ev.data" data-ad="ev.dataAD">
+        </div>
+        <div class="field">
+          <div class="lblrow"><label for="f-hora" class="lbl">Horário</label><label class="ad"><input type="checkbox" id="f-horaAD" data-k="ev.horaAD">A definir</label></div>
+          <input type="text" id="f-hora" data-k="ev.hora" data-ad="ev.horaAD" placeholder="Ex.: 19h às 23h">
+        </div>
+        <div class="field full">
+          <div class="lblrow"><label for="f-local" class="lbl">Local do evento</label><label class="ad"><input type="checkbox" id="f-localAD" data-k="ev.localAD">A definir</label></div>
+          <input type="text" id="f-local" data-k="ev.local" data-ad="ev.localAD" placeholder="Ex.: Chácara Recanto, Indaiatuba">
+        </div>
+        <div class="field">
+          <div class="lblrow"><label for="f-conv" class="lbl">Nº de convidados</label><label class="ad"><input type="checkbox" id="f-convAD" data-k="ev.convAD">A definir</label></div>
+          <input type="text" id="f-conv" data-k="ev.conv" data-ad="ev.convAD" inputmode="numeric" placeholder="Ex.: 120">
+        </div>
+        <div class="field"><label for="f-orc">Data do orçamento</label><input type="date" id="f-orc" data-k="orc"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>3 · Apresentação</h2>
+      <p class="hint">O texto da modalidade principal aparece na capa. O das outras aparece no início de cada uma.</p>
+      <div id="intros" style="display:grid;gap:12px"></div>
+    </section>
+
+    <section class="card">
+      <h2>4 · Itens do cardápio <i id="n-itens"></i></h2>
+      <p class="hint">Toque num item para incluir ou tirar. Itens que você adicionar ficam guardados para os próximos cardápios.</p>
+      <div class="legend"><span><i class="l-on"></i>No cardápio</span><span><i></i>Disponível</span><span><i class="l-sug"></i>Sugestão nova</span></div>
+      <div class="sec-list" id="secoes"></div>
+      <form class="newsec" id="f-newsec"><input type="text" id="f-newsec-t" placeholder="Nova seção (ex.: Mesa de frios)" aria-label="Nome da nova seção"><button type="submit">+ Seção</button></form>
+    </section>
+
+    <section class="card">
+      <h2>5 · Valor</h2>
+      <div class="grid2" style="margin-top:10px">
+        <div class="field"><label for="f-vtipo">Como mostrar</label>
+          <select id="f-vtipo" data-k="valor.tipo">
+            <option value="total">Valor total</option>
+            <option value="pessoa">Valor por pessoa</option>
+            <option value="combinar">A combinar</option>
+            <option value="ocultar">Não mostrar valor</option>
+          </select></div>
+        <div class="field"><label for="f-valor">Valor (R$)</label><input type="text" id="f-valor" data-k="valor.v" inputmode="decimal" placeholder="Ex.: 8.500,00"></div>
+        <label class="ad full"><input type="checkbox" id="f-ext" data-k="valor.extenso">Escrever o valor por extenso</label>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>6 · Informações e observações</h2>
+      <div class="field" style="margin-top:10px"><label for="f-cond">Informações (uma por linha)</label><textarea id="f-cond" data-k="cond" rows="4"></textarea></div>
+      <div class="field" style="margin-top:12px"><label for="f-obs">Observações para este cliente</label><textarea id="f-obs" data-k="obs" rows="3" placeholder="Ex.: Opção vegetariana para 10 convidados."></textarea></div>
+    </section>
+
+    <details class="card">
+      <summary>Dados da empresa</summary>
+      <div class="grid2">
+        <div class="field"><label for="e-nome">Nome</label><input type="text" id="e-nome" data-e="nome"></div>
+        <div class="field"><label for="e-tel">Telefones</label><input type="text" id="e-tel" data-e="tel"></div>
+        <div class="field"><label for="e-email">E-mail</label><input type="text" id="e-email" data-e="email"></div>
+        <div class="field"><label for="e-site">Site</label><input type="text" id="e-site" data-e="site"></div>
+        <div class="field"><label for="e-insta">Instagram</label><input type="text" id="e-insta" data-e="insta" placeholder="@cintraeventos"></div>
+      </div>
+    </details>
+  </div>
+
+  <aside class="preview" id="preview">
+    <div class="preview-head"><b>Prévia do PDF</b><span id="n-pags"></span></div>
+    <div class="paperbox" id="paperbox"><div class="paperscale" id="paperscale"><div id="paper"></div></div></div>
+  </aside>
+</main>
+
+<div class="overlay" id="ov" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="ov-t">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h3 id="ov-t">Meus cardápios</h3><button class="icon-btn" id="ov-x" type="button" aria-label="Fechar">×</button></div>
+    <div class="saved" id="saved"></div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>const LOGO="__LOGO__";const TALHERES="__TALHERES__";</script>
+<script>
+/* ============================================================
+   CATÁLOGO — itens: já marcados | outros: disponíveis | sug: sugestões novas
+   ============================================================ */
+const CAT = {
+  churrasco: {
+    nome: "Churrasco", resumo: "Carnes nobres na brasa",
+    intro: "Experimente o autêntico sabor do churrasco premium. Delicie-se com cortes selecionados de carnes nobres e acompanhamentos irresistíveis, preparados com maestria por nossos churrasqueiros experientes. Opção perfeita para celebrar momentos especiais.",
+    secoes: [
+      { id: "entradas", titulo: "Entradas",
+        itens: ["Pão de alho", "Queijo coalho", "Linguicinha", "Pancetta", "Mandioca frita", "Mini pastéis de carne e queijo"],
+        sug: ["Polenta frita", "Torresmo à pururuca", "Provolone na brasa com orégano", "Bolinho de mandioca com carne seca", "Coxinha da asa (drumete)"] },
+      { id: "carnes", titulo: "Carnes",
+        itens: ["Assado de tira bovino", "Bife ancho", "Picanha", "Fraldinha"],
+        outros: ["Entrecôte", "Carré de cordeiro", "Linguiça nobre"],
+        sug: ["Cupim", "Maminha", "Costela bovina fogo de chão", "Prime rib", "Chorizo", "Denver steak"] },
+      { id: "aves", titulo: "Aves e suínos",
+        itens: ["Tulipa de frango", "Costela suína", "Coração de frango"],
+        outros: ["Sobrecoxa desossada"],
+        sug: ["Pernil suíno", "Lombo suíno com ervas", "Medalhão de frango com bacon", "Linguiça toscana"] },
+      { id: "guarn", titulo: "Guarnições",
+        itens: ["Arroz biro-biro", "Farofa nobre especial", "Vinagrete"],
+        outros: ["Arroz branco", "Mini pão filãozinho"],
+        sug: ["Arroz carreteiro", "Mandioca cozida na manteiga", "Batata rústica", "Feijão tropeiro", "Maionese de batata"] },
+      { id: "saladas", titulo: "Saladas",
+        itens: ["Mix de folhas com tomate seco, raspas de parmesão e tomatinhos cereja"],
+        outros: ["Mix de saladas verdes, montadas e decoradas"],
+        sug: ["Salpicão de frango", "Salada caprese", "Tabule", "Salada de palmito"] },
+      { id: "sobremesa", titulo: "Sobremesa",
+        itens: ["Banana assada com sorvete de creme, mel e canela"],
+        sug: ["Abacaxi assado com canela", "Pudim de leite condensado", "Mousse de maracujá", "Doce de leite com queijo"] },
+      { id: "bebidas", titulo: "Bebidas", nota: "Não alcoólicas",
+        itens: ["Refrigerantes (normais e diet)", "Água com e sem gás"],
+        outros: ["Cerveja (marca e quantidade a combinar)"],
+        sug: ["Sucos naturais", "Chope", "Caipirinhas"] },
+      { id: "utens", titulo: "Utensílios",
+        itens: ["Utensílios para elaboração do evento", "Pratos", "Talheres", "Taças e copos"],
+        outros: ["Guardanapos", "Carvão", "Bandejas", "Réchauds"] },
+      { id: "mao", titulo: "Mão de obra", nota: "Todos devidamente uniformizados",
+        itens: ["Churrasqueiro", "Ajudantes"],
+        outros: ["Cozinheiro(a)", "Garçons"] },
+    ],
+  },
+  boteco: {
+    nome: "Comida de Boteco", resumo: "Petiscos de botequim",
+    intro: "Delicie-se com uma variedade irresistível de petiscos tradicionais de botequim. Uma explosão de sabores para a sua festa!",
+    secoes: [
+      { id: "porcoes", titulo: "Porções e fritos",
+        itens: ["Mini pasteizinhos", "Mini croquetes", "Mini coxinhas", "Mini empadas", "Mandioca frita", "Polenta frita", "Torresmo à pururuca", "Mini porções de calabresa acebolada"],
+        sug: ["Bolinho de bacalhau", "Frango a passarinho", "Isca de tilápia empanada", "Dadinho de tapioca com geleia de pimenta", "Batata frita com cheddar e bacon", "Bolinho de feijoada"] },
+      { id: "caldos", titulo: "Caldinhos",
+        itens: ["Caldinho de quenga", "Caldinho de feijão picante com especiarias"],
+        sug: ["Caldo verde", "Caldinho de mandioca com carne seca", "Caldinho de camarão"] },
+      { id: "lanches", titulo: "Lanches e pratinhos",
+        itens: ["Lanchinhos na baguete com frios", "Lanche de pernil na chapa", "Escondidinho de carne seca"],
+        sug: ["Mini hambúrguer artesanal", "Bruschetta de tomate e manjericão", "Arroz carreteiro no copinho"] },
+      { id: "bebidas", titulo: "Bebidas", on: false,
+        itens: ["Refrigerantes (normais e diet)", "Água com e sem gás"],
+        outros: ["Cerveja (marca e quantidade a combinar)"],
+        sug: ["Chope", "Caipirinhas", "Sucos naturais"] },
+      { id: "utens", titulo: "Materiais",
+        itens: ["Utensílios para elaboração do evento"],
+        outros: ["Louças", "Talheres de inox", "Travessas", "Guardanapos de papel"] },
+      { id: "mao", titulo: "Mão de obra", nota: "Todos devidamente uniformizados",
+        itens: ["Cozinheiro(a)", "Ajudantes"],
+        outros: ["Garçom"] },
+    ],
+  },
+  jantar: {
+    nome: "Jantar Convencional", resumo: "Entradas, prato principal e sobremesa",
+    intro: "Nosso buffet de jantar convencional é ideal para eventos com recepção de maior duração, como casamentos e festas de debutante. O menu reúne diferentes entradas e um jantar completo, com opções clássicas e apropriadas para qualquer época do ano. Contamos com equipe qualificada, pronta para oferecer a você e aos seus convidados o melhor serviço durante todo o evento.",
+    secoes: [
+      { id: "embutidos", grupo: "Entradas", titulo: "Embutidos",
+        itens: ["Salame italiano", "Lombo canadense", "Peito de peru", "Peperoni"],
+        sug: ["Presunto parma", "Copa", "Mortadela trufada"] },
+      { id: "queijos", grupo: "Entradas", titulo: "Queijos",
+        itens: ["Parmesão", "Gorgonzola", "Brie", "Provolone", "Prato"],
+        sug: ["Gouda", "Muçarela de búfala", "Queijo coalho"] },
+      { id: "acomp", grupo: "Entradas", titulo: "Acompanhamentos",
+        itens: ["Torradas", "Pães italianos", "Patês de atum, azeitona e frango", "Molho pesto", "Geleia", "Azeitona", "Frutas frescas"],
+        sug: ["Grissini", "Castanhas e nozes", "Tomate seco", "Mel"] },
+      { id: "assados", grupo: "Entradas", titulo: "Salgados assados", nota: "Escolher 3 opções",
+        itens: ["Vol-au-vent: camarão ou alho-poró", "Mini esfiha: carne ou frango", "Mini empada: palmito ou frango com catupiry", "Croissant: presunto e queijo ou quatro queijos", "Folhado de peito de peru ou frango com catupiry"],
+        sug: ["Mini quiche: alho-poró ou brie com damasco", "Mini pão de queijo recheado", "Enroladinho de calabresa"] },
+      { id: "fritos", grupo: "Entradas", titulo: "Salgados fritos", nota: "Escolher 5 opções",
+        itens: ["Coxinha", "Bolinha de queijo", "Croquete: carne ou abóbora", "Kibe", "Enroladinho de salsicha", "Bolinho de alho-poró", "Coxinha de mandioca com carne"],
+        sug: ["Bolinho de bacalhau", "Risoles de camarão", "Croquete de costela", "Bolinho de arroz"] },
+      { id: "vermelha", grupo: "Prato principal", titulo: "Carne vermelha", nota: "Escolher 1 opção",
+        itens: ["Filé mignon ao molho madeira", "Miolo de alcatra ao molho funghi", "Strogonoff de filé mignon", "Medalhão de filé mignon"],
+        outros: ["Maminha na manteiga", "Lagarto recheado com bacon e cenoura ao molho madeira"],
+        sug: ["Filé mignon ao molho de vinho tinto", "Costela bovina assada lentamente ao barbecue", "Cupim assado"] },
+      { id: "branca", grupo: "Prato principal", titulo: "Carne branca", nota: "Escolher 1 opção",
+        itens: ["Salmão assado com molho de maracujá", "Filé de pescada ao molho de limão com alcaparras na manteiga", "Filé de frango grelhado na manteiga"],
+        outros: ["Filé de tilápia grelhado com alcaparras", "Filé de frango grelhado com creme de milho", "Medalhão de frango com bacon"],
+        sug: ["Frango ao molho de mostarda e mel", "Lombo suíno ao molho de laranja", "Tilápia com crosta de castanhas"] },
+      { id: "guarn", grupo: "Prato principal", titulo: "Guarnições",
+        itens: ["Arroz branco", "Risoto de quatro queijos", "Batata ao molho branco com especiarias", "Legumes provençais", "Batata chips"],
+        outros: ["Batata rústica", "Legumes salteados na manteiga", "Batata frita"],
+        sug: ["Arroz com amêndoas", "Risoto de limão-siciliano", "Purê de mandioquinha", "Arroz à grega"] },
+      { id: "massas", grupo: "Prato principal", titulo: "Massas", nota: "Escolher 2 opções",
+        itens: ["Rondelli: presunto e queijo ou quatro queijos", "Manicaretti: presunto e queijo ou quatro queijos", "Talharim", "Fettuccine"],
+        sug: ["Nhoque de batata", "Penne", "Lasanha à bolonhesa", "Sorrentino de muçarela de búfala"] },
+      { id: "molhos", grupo: "Prato principal", titulo: "Molhos para as massas",
+        itens: ["Molho branco", "Ao sugo", "Rosé"],
+        sug: ["Pesto de manjericão", "Quatro queijos", "Bolonhesa"] },
+      { id: "sobremesa", grupo: "Sobremesa e finalização", titulo: "Sobremesa", nota: "Escolher 1 opção",
+        itens: ["Salada de frutas com creme de leite e manjericão", "Mini brownie com sorvete de creme"],
+        sug: ["Pudim de leite condensado", "Mousse de maracujá", "Pavê de chocolate", "Petit gâteau com sorvete", "Taça de frutas vermelhas com chantilly"] },
+      { id: "final", grupo: "Sobremesa e finalização", titulo: "Finalização",
+        itens: ["Mesa de café com petit fours"],
+        sug: ["Licores finos", "Chás e infusões"] },
+      { id: "bebidas", grupo: "Serviço", titulo: "Bebidas", on: false,
+        itens: [],
+        sug: ["Refrigerantes (normais e diet)", "Água com e sem gás", "Sucos naturais", "Espumante para o brinde"] },
+      { id: "utens", grupo: "Serviço", titulo: "Utensílios",
+        itens: ["Pratos", "Talheres", "Copos", "Réchauds"],
+        sug: ["Taças de cristal", "Sousplats e guardanapos de tecido"] },
+      { id: "mao", grupo: "Serviço", titulo: "Mão de obra", nota: "Todos devidamente qualificados e uniformizados",
+        itens: ["Cozinheiro", "Ajudantes", "Garçons"],
+        sug: ["Maître", "Barman", "Copeira"] },
+    ],
+  },
+  livre: {
+    nome: "Cardápio Especial", resumo: "Monte do zero, seção a seção",
+    intro: "Um cardápio montado sob medida para o seu evento, com pratos escolhidos a dedo e equipe qualificada para cuidar de cada detalhe.",
+    secoes: [
+      { id: "entradas", titulo: "Entradas", itens: [] },
+      { id: "principal", titulo: "Prato principal", itens: [] },
+      { id: "guarn", titulo: "Guarnições", itens: [] },
+      { id: "sobremesa", titulo: "Sobremesa", itens: [] },
+      { id: "bebidas", titulo: "Bebidas", itens: [], sug: ["Refrigerantes (normais e diet)", "Água com e sem gás", "Sucos naturais"] },
+      { id: "utens", titulo: "Utensílios", itens: ["Pratos", "Talheres", "Copos"], outros: ["Réchauds", "Taças"] },
+      { id: "mao", titulo: "Mão de obra", nota: "Todos devidamente uniformizados", itens: ["Cozinheiro(a)", "Ajudantes"], outros: ["Garçons", "Churrasqueiro"] },
+    ],
+  },
+};
+
+const CONDICOES = [
+  "Duração do evento: 4 horas.",
+  "Hora adicional: 20% sobre o valor contratado.",
+  "Caso o número de convidados ultrapasse o previsto em contrato, será cobrado valor adicional por pessoa excedente.",
+];
+const EMPRESA_PADRAO = {
+  nome: "Cintra Eventos", tel: "19 9631-5089", email: "contato@cintraeventos.com.br",
+  site: "www.cintraeventos.com.br", insta: "",
+};
+
+/* ============================================================
+   UTILITÁRIOS
+   ============================================================ */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const html = s => { const t = document.createElement("template"); t.innerHTML = s.trim(); return t.content.firstElementChild; };
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* sem armazenamento */ } },
+};
+const hojeISO = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; };
+function dataLonga(iso) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || ""); if (!m) return "";
+  const d = new Date(+m[1], +m[2] - 1, +m[3]);
+  const s = d.toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+function dataCurta(iso) { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || ""); return m ? `${m[3]}/${m[2]}/${m[1]}` : ""; }
+function parseMoney(s) {
+  s = String(s || "").replace(/R\$|\s/g, ""); if (!s) return null;
+  if (s.includes(",")) s = s.replace(/\./g, "").replace(",", ".");
+  else if (/^\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g, "");
+  const n = parseFloat(s); return isNaN(n) ? null : Math.round(n * 100) / 100;
+}
+const brl = n => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+// Número por extenso (reais)
+const UN = ["zero", "um", "dois", "três", "quatro", "cinco", "seis", "sete", "oito", "nove", "dez", "onze", "doze", "treze", "catorze", "quinze", "dezesseis", "dezessete", "dezoito", "dezenove"];
+const DZ = ["", "", "vinte", "trinta", "quarenta", "cinquenta", "sessenta", "setenta", "oitenta", "noventa"];
+const CT = ["", "cento", "duzentos", "trezentos", "quatrocentos", "quinhentos", "seiscentos", "setecentos", "oitocentos", "novecentos"];
+function ate999(n) {
+  if (n === 100) return "cem";
+  const c = Math.floor(n / 100), r = n % 100, p = [];
+  if (c) p.push(CT[c]);
+  if (r) p.push(r < 20 ? UN[r] : DZ[Math.floor(r / 10)] + (r % 10 ? " e " + UN[r % 10] : ""));
+  return p.join(" e ");
+}
+function inteiro(n) {
+  if (n === 0) return "zero";
+  const g = [[Math.floor(n / 1e6), "mi"], [Math.floor(n % 1e6 / 1000), "mil"], [n % 1000, ""]].filter(x => x[0]);
+  const txt = ([v, k]) => k === "mi" ? (v === 1 ? "um milhão" : ate999(v) + " milhões") : k === "mil" ? (v === 1 ? "mil" : ate999(v) + " mil") : ate999(v);
+  return g.map((x, i) => {
+    if (i === 0) return txt(x);
+    const last = i === g.length - 1, v = x[0];
+    return (last && (v < 100 || v % 100 === 0) ? " e " : " ") + txt(x);
+  }).join("");
+}
+function extenso(valor) {
+  const r = Math.floor(valor), c = Math.round((valor - r) * 100), p = [];
+  if (r) p.push(inteiro(r) + (r % 1e6 === 0 && r >= 1e6 ? " de reais" : r === 1 ? " real" : " reais"));
+  if (c) p.push(inteiro(c) + (c === 1 ? " centavo" : " centavos"));
+  return p.join(" e ") || "zero reais";
+}
+
+/* ============================================================
+   ESTADO
+   ============================================================ */
+const K_RASC = "cintra-cardapio-rascunho", K_SALVOS = "cintra-cardapios", K_EXTRAS = "cintra-extras", K_EMP = "cintra-empresa";
+let extras = store.get(K_EXTRAS, {});
+let EMP = Object.assign({}, EMPRESA_PADRAO, store.get(K_EMP, {}));
+delete EMP.razao; delete EMP.cnpj;
+
+function novoEstado() {
+  return {
+    v: 1, id: null, mod: "churrasco", adic: [], opcao: "",
+    cliente: { nome: "", tel: "", email: "" },
+    ev: { data: "", dataAD: false, hora: "", horaAD: false, local: "", localAD: false, conv: "", convAD: false },
+    orc: hojeISO(), mods: {},
+    valor: { tipo: "total", v: "", extenso: true },
+    cond: CONDICOES.join("\n"), obs: "",
+  };
+}
+function construirMod(key) {
+  const c = CAT[key], ex = extras[key] || {};
+  return {
+    intro: c.intro,
+    secoes: c.secoes.map(s => {
+      const itens = [
+        ...s.itens.map(t => ({ t, on: true })),
+        ...(s.outros || []).map(t => ({ t, on: false })),
+        ...(s.sug || []).map(t => ({ t, on: false, sug: true })),
+      ];
+      (ex[s.id] || []).forEach(t => { if (!itens.some(i => i.t === t)) itens.push({ t, on: false, extra: true }); });
+      return { id: s.id, grupo: s.grupo || "", titulo: s.titulo, nota: s.nota || "", on: s.on !== false, itens };
+    }),
+  };
+}
+let S = store.get(K_RASC, null) || novoEstado();
+S.adic ||= [];
+const modData = key => (S.mods[key] ||= construirMod(key));
+const mod = () => modData(S.mod);
+// Modalidades no cardápio: a principal primeiro, depois as combinadas
+const ativos = () => [{ key: S.mod, main: true, sug: false, valor: "" }, ...S.adic.map(a => ({ key: a.mod, main: false, sug: !!a.sug, valor: a.valor || "" }))];
+const nomesTitulo = () => ativos().filter(a => !a.sug).map(a => CAT[a.key].nome);
+const nomesSug = () => ativos().filter(a => a.sug).map(a => CAT[a.key].nome);
+const juntar = l => l.length > 1 ? l.slice(0, -1).join(", ") + " & " + l.at(-1) : (l[0] || "");
+
+let salvarRasc = 0;
+function persistir() { clearTimeout(salvarRasc); salvarRasc = setTimeout(() => store.set(K_RASC, S), 300); }
+const getPath = (o, p) => p.split(".").reduce((a, k) => a?.[k], o);
+function setPath(o, p, v) { const ks = p.split("."), last = ks.pop(); ks.reduce((a, k) => a[k], o)[last] = v; }
+
+/* ============================================================
+   EDITOR
+   ============================================================ */
+function renderMods() {
+  $("#mods").innerHTML = Object.entries(CAT).map(([k, m]) =>
+    `<label class="modopt"><input type="radio" name="mod" value="${k}" ${k === S.mod ? "checked" : ""}><span class="mname">${esc(m.nome)}</span><span class="mdesc">${esc(m.resumo)}</span></label>`).join("");
+  $("#combo-list").innerHTML = S.adic.map((a, i) => `<div class="combo-row" data-c="${i}">
+      <div class="combo-top"><span class="mname">+ ${esc(CAT[a.mod].nome)}</span>
+        <label class="ad"><span class="switch"><input type="checkbox" data-c-a="sug" ${a.sug ? "checked" : ""} aria-label="Mostrar ${esc(CAT[a.mod].nome)} como sugestão"><span></span></span>Como sugestão</label>
+        <button class="icon-btn" type="button" data-c-a="del" aria-label="Tirar ${esc(CAT[a.mod].nome)} do cardápio">×</button></div>
+      <input type="text" data-c-a="valor" value="${esc(a.valor || "")}" placeholder="Valor desta parte (opcional). Ex.: + R$ 35,00 por pessoa" aria-label="Valor de ${esc(CAT[a.mod].nome)}">
+    </div>`).join("");
+  $("#combo-list").hidden = !S.adic.length;
+  const usados = new Set(ativos().map(a => a.key));
+  $("#combo-add").innerHTML = Object.entries(CAT).filter(([k]) => !usados.has(k))
+    .map(([k, m]) => `<button type="button" data-add="${k}">+ ${esc(m.nome)}</button>`).join("");
+  $("#intros").innerHTML = ativos().map(a => `<div class="field"><label for="f-intro-${a.key}" class="lbl">${esc(CAT[a.key].nome)}${a.main ? " (capa)" : a.sug ? " (sugestão)" : ""}</label><textarea id="f-intro-${a.key}" data-intro="${a.key}" rows="4">${esc(modData(a.key).intro)}</textarea></div>`).join("");
+}
+const REPETIDAS = ["utens", "mao", "bebidas"];
+$("#combo-add").addEventListener("click", e => {
+  const b = e.target.closest("[data-add]"); if (!b) return;
+  const key = b.dataset.add;
+  S.adic.push({ mod: key, sug: true, valor: "" });
+  const m = modData(key);
+  m.secoes.forEach(s => { if (REPETIDAS.includes(s.id)) s.on = false; });
+  estrutura(); toast(`${CAT[key].nome} adicionada como sugestão.`);
+});
+$("#combo-list").addEventListener("click", e => {
+  const b = e.target.closest('[data-c-a="del"]'); if (!b) return;
+  S.adic.splice(+b.closest(".combo-row").dataset.c, 1); estrutura();
+});
+$("#combo-list").addEventListener("input", e => {
+  const a = e.target.dataset.cA; if (!a) return;
+  const c = S.adic[+e.target.closest(".combo-row").dataset.c];
+  if (a === "sug") { c.sug = e.target.checked; renderMods(); renderSecoes(); }
+  else c.valor = e.target.value;
+  persistir(); agendarPapel();
+});
+function estrutura() { persistir(); renderMods(); renderSecoes(); agendarPapel(); }
+function preencherCampos() {
+  document.querySelectorAll("[data-k]").forEach(el => {
+    const k = el.dataset.k;
+    const v = getPath(S, k);
+    if (el.type === "checkbox") el.checked = !!v; else el.value = v ?? "";
+  });
+  document.querySelectorAll("[data-ad]").forEach(el => { el.disabled = !!getPath(S, el.dataset.ad); });
+  document.querySelectorAll("[data-e]").forEach(el => { el.value = EMP[el.dataset.e] ?? ""; });
+}
+function chip(it, j) {
+  const rm = it.extra || it.custom;
+  return `<span class="chipw ${rm ? "rm" : ""}"><button type="button" class="chip ${it.on ? "on" : ""} ${it.sug ? "sug" : ""}" data-j="${j}" aria-pressed="${it.on}">${it.on ? "✓ " : ""}${esc(it.t)}${it.sug ? "<small>sugestão</small>" : ""}</button>${rm ? `<button type="button" class="chip-x" data-x="${j}" aria-label="Esquecer ${esc(it.t)}">×</button>` : ""}</span>`;
+}
+function renderSecoes() {
+  const varias = ativos().length > 1;
+  $("#secoes").innerHTML = ativos().map(a => {
+  const m = modData(a.key); let lastG = null;
+  const cab = varias ? `<div class="mod-tag"><b>${esc(CAT[a.key].nome)}</b>${a.main ? `<span class="badge">principal</span>` : a.sug ? `<span class="badge">sugestão</span>` : ""}</div>` : "";
+  return cab + m.secoes.map((s, i) => {
+    const g = s.grupo && s.grupo !== lastG ? `<div class="grp-tag">${esc(s.grupo)}</div>` : ""; lastG = s.grupo;
+    const n = s.itens.filter(x => x.on).length;
+    return `${g}<div class="sec-ed ${s.on ? "" : "off"}" data-m="${a.key}" data-i="${i}">
+      <div class="sec-top">
+        <label class="switch" title="Incluir seção no cardápio"><input type="checkbox" data-a="on" ${s.on ? "checked" : ""} aria-label="Incluir ${esc(s.titulo)}"><span></span></label>
+        <input class="sec-title" data-a="titulo" value="${esc(s.titulo)}" aria-label="Título da seção">
+        <span class="sec-meta">${n} ${n === 1 ? "item" : "itens"}</span>
+        ${s.custom ? `<button class="icon-btn" type="button" data-a="del" aria-label="Remover seção">×</button>` : ""}
+      </div>
+      <input class="sec-nota" data-a="nota" value="${esc(s.nota)}" placeholder="Observação (ex.: Escolher 3 opções)" aria-label="Observação da seção">
+      <div class="chips">${s.itens.map(chip).join("")}</div>
+      <form class="add"><input type="text" placeholder="Adicionar item ou variação…" aria-label="Novo item em ${esc(s.titulo)}"><button type="submit">Adicionar</button></form>
+    </div>`;
+  }).join("");
+  }).join("");
+  contarItens();
+}
+function contarItens() {
+  const n = ativos().flatMap(a => modData(a.key).secoes).filter(s => s.on).reduce((a, s) => a + s.itens.filter(x => x.on).length, 0);
+  $("#n-itens").textContent = `${n} no cardápio`;
+}
+function renderTudo() { renderMods(); preencherCampos(); renderSecoes(); agendarPapel(); atualizarSalvos(); }
+
+// Campos simples
+document.addEventListener("input", e => {
+  const el = e.target;
+  if (el.dataset.k) {
+    const v = el.type === "checkbox" ? el.checked : el.value;
+    setPath(S, el.dataset.k, v);
+    if (el.type === "checkbox") document.querySelectorAll(`[data-ad="${el.dataset.k}"]`).forEach(x => x.disabled = v);
+    persistir(); agendarPapel();
+  } else if (el.dataset.intro) {
+    modData(el.dataset.intro).intro = el.value; persistir(); agendarPapel();
+  } else if (el.dataset.e) {
+    EMP[el.dataset.e] = el.value; store.set(K_EMP, EMP); agendarPapel();
+  }
+});
+document.addEventListener("change", e => {
+  if (e.target.name === "mod") { S.mod = e.target.value; S.adic = S.adic.filter(a => a.mod !== S.mod); estrutura(); }
+});
+
+// Seções
+const secoesEl = $("#secoes");
+secoesEl.addEventListener("click", e => {
+  const box = e.target.closest(".sec-ed"); if (!box) return;
+  const km = box.dataset.m, s = modData(km).secoes[+box.dataset.i];
+  const c = e.target.closest(".chip"), x = e.target.closest(".chip-x");
+  if (c) {
+    const it = s.itens[+c.dataset.j]; it.on = !it.on;
+    c.classList.toggle("on", it.on); c.setAttribute("aria-pressed", it.on);
+    c.innerHTML = `${it.on ? "✓ " : ""}${esc(it.t)}${it.sug ? "<small>sugestão</small>" : ""}`;
+    const n = s.itens.filter(i => i.on).length;
+    box.querySelector(".sec-meta").textContent = `${n} ${n === 1 ? "item" : "itens"}`;
+    contarItens(); persistir(); agendarPapel();
+  } else if (x) {
+    const it = s.itens.splice(+x.dataset.x, 1)[0];
+    const lst = extras[km]?.[s.id]; if (lst) { extras[km][s.id] = lst.filter(t => t !== it.t); store.set(K_EXTRAS, extras); }
+    renderSecoes(); persistir(); agendarPapel();
+  } else if (e.target.closest('[data-a="del"]')) {
+    modData(km).secoes.splice(+box.dataset.i, 1); renderSecoes(); persistir(); agendarPapel();
+  }
+});
+secoesEl.addEventListener("input", e => {
+  const box = e.target.closest(".sec-ed"); const a = e.target.dataset.a; if (!box || !a) return;
+  const s = modData(box.dataset.m).secoes[+box.dataset.i];
+  if (a === "on") { s.on = e.target.checked; box.classList.toggle("off", !s.on); contarItens(); }
+  else s[a] = e.target.value;
+  persistir(); agendarPapel();
+});
+secoesEl.addEventListener("submit", e => {
+  e.preventDefault();
+  const box = e.target.closest(".sec-ed"), inp = e.target.querySelector("input");
+  const t = inp.value.trim(); if (!t) return;
+  const km = box.dataset.m, s = modData(km).secoes[+box.dataset.i];
+  if (!s.itens.some(i => i.t.toLowerCase() === t.toLowerCase())) {
+    s.itens.push({ t, on: true, extra: true });
+    ((extras[km] ||= {})[s.id] ||= []).push(t); store.set(K_EXTRAS, extras);
+  } else s.itens.find(i => i.t.toLowerCase() === t.toLowerCase()).on = true;
+  renderSecoes(); persistir(); agendarPapel();
+  const again = secoesEl.querySelector(`.sec-ed[data-m="${km}"][data-i="${box.dataset.i}"] .add input`); again && again.focus();
+});
+$("#f-newsec").addEventListener("submit", e => {
+  e.preventDefault();
+  const t = $("#f-newsec-t").value.trim(); if (!t) return;
+  mod().secoes.push({ id: "s" + Date.now().toString(36), grupo: "", titulo: t, nota: "", on: true, itens: [], custom: true });
+  $("#f-newsec-t").value = ""; renderSecoes(); persistir(); agendarPapel();
+  const lst = secoesEl.querySelectorAll(`.sec-ed[data-m="${S.mod}"] .add input`), last = lst[lst.length - 1]; last && last.focus();
+});
+
+/* ============================================================
+   PAPEL (páginas A4)
+   ============================================================ */
+const AD = `<em class="ad">A definir</em>`;
+const campo = (v, ad) => ad || !String(v || "").trim() ? AD : esc(v);
+
+function capa() {
+  const m = mod(), ev = S.ev, titulo = juntar(nomesTitulo()), sugs = nomesSug();
+  const contato = [S.cliente.tel, S.cliente.email].filter(x => x && x.trim()).map(esc).join(" · ");
+  const conv = ev.convAD || !ev.conv.trim() ? AD : esc(ev.conv.trim()) + (/^\d+$/.test(ev.conv.trim()) ? " convidados" : "");
+  const rows = [
+    ["Cliente", campo(S.cliente.nome), "wide"],
+    contato ? ["Contato", contato, "wide"] : null,
+    ["Data do evento", ev.dataAD || !ev.data ? AD : esc(dataLonga(ev.data))],
+    ["Horário", campo(ev.hora, ev.horaAD)],
+    ["Local", campo(ev.local, ev.localAD), "wide"],
+    ["Convidados", conv],
+    ["Orçamento emitido em", S.orc ? esc(dataCurta(S.orc)) : AD],
+  ].filter(Boolean);
+  const dots = Array.from({ length: 30 }, () => "<i></i>").join("");
+  const contatoEmp = [EMP.tel, EMP.insta || EMP.site].filter(Boolean).map(esc).join("<span>|</span>");
+  return html(`<section class="pg cover">
+    <div class="cv-band t"></div><div class="cv-band b"></div>
+    <div class="cv-dots">${dots}</div>
+    <div class="cv-body">
+      <img class="cv-logo" src="${LOGO}" alt="">
+      <div class="cv-brand">${esc(EMP.nome)}</div>
+      <div class="cv-eyebrow">Cardápio personalizado</div>
+      <h1 class="cv-title ${titulo.length > 34 ? "sm" : titulo.length > 22 ? "md" : ""}">${esc(titulo)}</h1>
+      ${S.opcao.trim() ? `<div class="cv-opc">${esc(S.opcao)}</div>` : ""}
+      ${sugs.length ? `<div class="cv-sug">Com sugestão de ${esc(juntar(sugs))}</div>` : ""}
+      ${m.intro.trim() ? `<p class="cv-intro">${esc(m.intro)}</p>` : ""}
+      <dl class="cv-ficha">${rows.map(([l, v, w]) => `<div class="${w || ""}"><dt>${l}</dt><dd>${v}</dd></div>`).join("")}</dl>
+    </div>
+    <div class="cv-contact">${contatoEmp}</div>
+    <img class="cv-tal" src="${TALHERES}" alt="">
+  </section>`);
+}
+function paginaInterna() {
+  const titulo = juntar(nomesTitulo());
+  const sub = [S.opcao, S.cliente.nome].filter(x => x && x.trim()).map(esc).join(" · ");
+  const foot = [EMP.nome, EMP.tel, EMP.email, EMP.site].filter(Boolean).map(esc).join(" · ");
+  return html(`<section class="pg in">
+    <div class="in-card">
+      <div class="in-head"><img src="${LOGO}" alt=""><div class="t ${titulo.length > 26 ? "sm" : ""}">${esc(titulo)}</div>${sub ? `<div class="s">${sub}</div>` : ""}</div>
+      <div class="flow"></div>
+      <div class="in-foot"><span>${foot}</span><span class="pn"></span></div>
+    </div>
+    <img class="in-tal" src="${TALHERES}" alt="">
+  </section>`);
+}
+function blocoSecao(s) {
+  const its = s.itens.filter(i => i.on);
+  const c2 = its.length >= 6 && its.every(i => i.t.length <= 38);
+  return html(`<div class="blk sec">
+    <div class="sec-h"><span class="rule"></span><h3>${esc(s.titulo)}</h3><span class="rule"></span></div>
+    ${s.nota.trim() ? `<div class="sec-n">${esc(s.nota)}</div>` : ""}
+    <ul class="its ${c2 ? "c2" : ""}">${its.map(i => `<li>${esc(i.t)}</li>`).join("")}</ul>
+  </div>`);
+}
+function blocoTitulo(t) { return html(`<div class="blk sec"><div class="sec-h"><span class="rule"></span><h3>${esc(t)}</h3><span class="rule"></span></div></div>`); }
+function blocosFinais() {
+  const out = [], v = S.valor;
+  if (v.tipo !== "ocultar") {
+    let label = v.tipo === "pessoa" ? "Valor por pessoa" : "Investimento", big, sub = "";
+    if (v.tipo === "combinar") big = "A combinar";
+    else {
+      const n = parseMoney(v.v);
+      if (n == null) big = `<em class="ad">A definir</em>`;
+      else {
+        big = esc(brl(n)) + (v.tipo === "pessoa" ? " <span>por pessoa</span>" : "");
+        if (v.extenso) sub = `(${esc(extenso(n))}${v.tipo === "pessoa" ? " por pessoa" : ""})`;
+        const conv = parseInt(S.ev.conv, 10);
+        if (v.tipo === "pessoa" && conv > 0 && !S.ev.convAD && /^\d+$/.test(S.ev.conv.trim()))
+          sub += `${sub ? "<br>" : ""}Total estimado para ${conv} convidados: ${esc(brl(n * conv))}`;
+      }
+    }
+    const b = html(`<div class="blk"><div class="val"><div class="l">${label}</div><div class="v">${big}</div>${sub ? `<div class="x">${sub}</div>` : ""}</div></div>`);
+    out.push(b);
+  }
+  const conds = S.cond.split("\n").map(x => x.trim()).filter(Boolean);
+  if (conds.length) {
+    const b = blocoTitulo("Informações");
+    b.append(html(`<ul class="cond">${conds.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`));
+    out.push(b);
+  }
+  if (S.obs.trim()) { const b = blocoTitulo("Observações"); b.append(html(`<p class="obs">${esc(S.obs.trim())}</p>`)); out.push(b); }
+  return out;
+}
+
+let papelTimer = 0;
+function agendarPapel() { clearTimeout(papelTimer); papelTimer = setTimeout(renderPapel, 120); }
+function renderPapel() {
+  const paper = $("#paper"); paper.innerHTML = "";
+  paper.append(capa());
+  const blocos = [], varias = ativos().length > 1;
+  ativos().forEach(a => {
+    const m = modData(a.key), secs = m.secoes.filter(s => s.on && s.itens.some(i => i.on));
+    if (!secs.length) return;
+    if (varias && !(a.main && nomesTitulo().length === 1)) {
+      const eyebrow = a.sug ? "Sugestão para complementar" : a.main ? "" : "E também";
+      blocos.push(html(`<div class="blk mhd ${a.sug ? "sug" : ""}">${eyebrow ? `<div class="e">${eyebrow}</div>` : ""}<div class="n">${esc(CAT[a.key].nome)}</div>${!a.main && m.intro.trim() ? `<p class="i">${esc(m.intro)}</p>` : ""}${a.valor.trim() ? `<div class="v">${esc(a.valor.trim())}</div>` : ""}</div>`));
+    }
+    let lastG = null;
+    secs.forEach(s => {
+      if (s.grupo && s.grupo !== lastG) blocos.push(html(`<div class="blk grp">${esc(s.grupo)}</div>`));
+      lastG = s.grupo; blocos.push(blocoSecao(s));
+    });
+  });
+  blocos.push(...blocosFinais());
+
+  let pg = paginaInterna(); paper.append(pg); let flow = pg.querySelector(".flow");
+  for (const b of blocos) {
+    flow.append(b);
+    if (flow.scrollHeight > flow.clientHeight + 1 && flow.children.length > 1) {
+      b.remove(); const carry = [b];
+      // títulos não ficam sozinhos no fim da página
+      let last = flow.lastElementChild;
+      while (last && (last.classList.contains("grp") || last.classList.contains("mhd")) && flow.children.length > 1) { last.remove(); carry.unshift(last); last = flow.lastElementChild; }
+      pg = paginaInterna(); paper.append(pg); flow = pg.querySelector(".flow");
+      carry.forEach(x => flow.append(x));
+    }
+  }
+  const pgs = paper.querySelectorAll(".pg");
+  pgs.forEach((p, i) => { const pn = p.querySelector(".pn"); if (pn) pn.textContent = `${i + 1} / ${pgs.length}`; });
+  $("#n-pags").textContent = `${pgs.length} ${pgs.length === 1 ? "página" : "páginas"} · A4`;
+  escalar();
+}
+function escalar() {
+  const box = $("#paperbox"), paper = $("#paper"), sc = $("#paperscale");
+  const w = box.clientWidth - 28; if (w <= 0) return;
+  const s = Math.min(1, w / 794);
+  paper.style.transform = `scale(${s})`;
+  sc.style.height = (paper.offsetHeight - 24) * s + "px";
+  sc.style.width = 794 * s + "px";
+}
+new ResizeObserver(escalar).observe($("#paperbox"));
+
+/* ============================================================
+   PDF
+   ============================================================ */
+let downloads = null;
+if (window.claude && typeof window.claude.use === "function") window.claude.use("downloads").then(d => { downloads = d; }).catch(() => {});
+const emArtifact = () => !!(window.claude && typeof window.claude.use === "function");
+
+function nomeArquivo() {
+  const partes = ["Cardápio", ativos().map(a => CAT[a.key].nome).join(" + "), S.opcao.trim(), S.cliente.nome.trim()].filter(Boolean);
+  return partes.join(" - ").replace(/[\\/:*?"<>|]+/g, "").slice(0, 150) + ".pdf";
+}
+async function gerarPDF() {
+  const btn = $("#b-pdf"); btn.disabled = true; const txt = btn.textContent; btn.textContent = "Gerando…";
+  try {
+    await document.fonts.ready; renderPapel();
+    const stage = document.createElement("div");
+    stage.style.cssText = "position:absolute;left:-12000px;top:0;width:794px";
+    document.body.append(stage);
+    const pages = [...$("#paper").querySelectorAll(".pg")].map(p => { const c = p.cloneNode(true); c.style.boxShadow = "none"; c.style.margin = "0"; stage.append(c); return c; });
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
+    for (let i = 0; i < pages.length; i++) {
+      const canvas = await html2canvas(pages[i], { scale: 2, backgroundColor: "#F8F3ED", logging: false, useCORS: true, width: 794, height: 1123, windowWidth: 1200 });
+      if (i) pdf.addPage();
+      pdf.addImage(canvas.toDataURL("image/jpeg", 0.92), "JPEG", 0, 0, 210, 297);
+    }
+    stage.remove();
+    const nome = nomeArquivo();
+    pdf.setProperties({ title: nome.replace(/\.pdf$/, ""), author: EMP.nome });
+    if (downloads) {
+      try { await downloads.save({ filename: nome, data: pdf.output("blob") }); toast("PDF salvo."); }
+      catch (err) { toast(err && err.code === "declined" ? "Download cancelado." : "Não foi possível salvar o PDF aqui."); }
+    } else if (emArtifact()) {
+      toast("Esta visualização não permite baixar arquivos. Abra o link no navegador.");
+    } else { pdf.save(nome); toast("PDF baixado."); }
+  } catch (err) {
+    console.error(err); toast("Não consegui gerar o PDF. Verifique a internet e tente de novo.");
+  } finally { btn.disabled = false; btn.textContent = txt; }
+}
+$("#b-pdf").addEventListener("click", gerarPDF);
+
+/* ============================================================
+   SALVOS / NOVO
+   ============================================================ */
+function listaSalvos() { return store.get(K_SALVOS, []); }
+function atualizarSalvos() { $("#n-salvos").textContent = listaSalvos().length; }
+function tituloDe(st) { return [st.cliente.nome.trim() || "Sem nome", [st.mod, ...(st.adic || []).map(a => a.mod)].map(k => CAT[k].nome).join(" + "), st.opcao.trim()].filter(Boolean).join(" · "); }
+$("#b-salvar").addEventListener("click", () => {
+  const l = listaSalvos();
+  if (!S.id) S.id = "c" + Date.now().toString(36);
+  const item = { id: S.id, titulo: tituloDe(S), em: new Date().toISOString(), estado: JSON.parse(JSON.stringify(S)) };
+  const i = l.findIndex(x => x.id === S.id); if (i >= 0) l[i] = item; else l.unshift(item);
+  store.set(K_SALVOS, l); persistir(); atualizarSalvos(); toast("Cardápio salvo em “Meus cardápios”.");
+});
+let novoArmado = 0;
+$("#b-novo").addEventListener("click", e => {
+  const b = e.currentTarget;
+  if (!novoArmado) { b.textContent = "Confirmar novo?"; b.classList.add("warn"); novoArmado = setTimeout(() => { b.textContent = "Novo"; b.classList.remove("warn"); novoArmado = 0; }, 3500); return; }
+  clearTimeout(novoArmado); novoArmado = 0; b.textContent = "Novo"; b.classList.remove("warn");
+  S = novoEstado(); persistir(); renderTudo(); toast("Novo cardápio em branco.");
+});
+function abrirLista() {
+  const l = listaSalvos();
+  $("#saved").innerHTML = l.length ? l.map(x => `<div class="saved-row" data-id="${x.id}"><div><b>${esc(x.titulo)}</b><span>Salvo em ${new Date(x.em).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" })}</span></div><button class="btn" type="button" data-o="abrir">Abrir</button><button class="btn" type="button" data-o="del">Excluir</button></div>`).join("")
+    : `<p class="empty">Nenhum cardápio salvo ainda. Use “Salvar” para guardar o cardápio atual neste aparelho.</p>`;
+  $("#ov").hidden = false;
+}
+$("#b-lista").addEventListener("click", abrirLista);
+$("#ov-x").addEventListener("click", () => $("#ov").hidden = true);
+$("#ov").addEventListener("click", e => { if (e.target.id === "ov") $("#ov").hidden = true; });
+document.addEventListener("keydown", e => { if (e.key === "Escape") $("#ov").hidden = true; });
+$("#saved").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  const id = b.closest(".saved-row").dataset.id, l = listaSalvos();
+  if (b.dataset.o === "abrir") {
+    const it = l.find(x => x.id === id); S = JSON.parse(JSON.stringify(it.estado)); S.adic ||= []; persistir(); renderTudo();
+    $("#ov").hidden = true; toast(`Aberto: ${it.titulo}`);
+  } else if (b.dataset.o === "del") {
+    if (b.dataset.armed) { store.set(K_SALVOS, l.filter(x => x.id !== id)); if (S.id === id) S.id = null; atualizarSalvos(); abrirLista(); }
+    else { b.dataset.armed = "1"; b.textContent = "Confirmar"; b.classList.add("warn"); }
+  }
+});
+
+let toastT = 0;
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 3200); }
+
+/* Abas no celular */
+function aba(qual) {
+  const ed = qual === "ed";
+  $("#t-ed").setAttribute("aria-selected", ed); $("#t-pv").setAttribute("aria-selected", !ed);
+  $("#editor").classList.toggle("offstage", !ed); $("#preview").classList.toggle("offstage", ed);
+  if (!ed) { escalar(); window.scrollTo({ top: 0 }); }
+}
+$("#t-ed").addEventListener("click", () => aba("ed"));
+$("#t-pv").addEventListener("click", () => aba("pv"));
+const mq = matchMedia("(max-width:1000px)");
+function aplicarMQ() { if (mq.matches) aba($("#t-pv").getAttribute("aria-selected") === "true" ? "pv" : "ed"); else { $("#editor").classList.remove("offstage"); $("#preview").classList.remove("offstage"); } escalar(); }
+mq.addEventListener("change", aplicarMQ);
+
+/* Início */
+$("#ui-logo").src = LOGO;
+renderTudo(); aplicarMQ();
+document.fonts.ready.then(renderPapel);
+</script>
