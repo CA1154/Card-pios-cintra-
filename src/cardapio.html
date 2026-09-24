@@ -567,7 +567,7 @@ const CAT = {
         itens: ["Arroz", "Vinagrete", "Farofa rica", "Couve refogada"],
         sug: ["Laranja em rodelas", "Banana à milanesa", "Bisteca suína"] },
       { id: "sobremesa", titulo: "Sobremesa",
-        itens: ["Abacaxi com raspas de limão e sorvete de creme"],
+        itens: ["Abacaxi refrescante com raspas de limão-siciliano"],
         sug: ["Doce de leite com queijo", "Pudim de leite condensado"] },
       { id: "bebidas", titulo: "Bebidas", on: false, itens: [],
         sug: ["Caipirinhas", "Refrigerantes (normais e diet)", "Água com e sem gás", "Cerveja (marca e quantidade a combinar)"] },
@@ -716,7 +716,14 @@ function construirMod(key) {
   };
 }
 let S = store.get(K_RASC, null) || novoEstado();
-S.adic ||= [];
+// Itens renomeados no catálogo: atualiza rascunhos e cardápios salvos antigos
+const RENOMEADOS = { "Abacaxi com raspas de limão e sorvete de creme": "Abacaxi refrescante com raspas de limão-siciliano" };
+function migrar(st) {
+  st.adic ||= [];
+  Object.values(st.mods || {}).forEach(m => m.secoes.forEach(sec => sec.itens.forEach(it => { if (RENOMEADOS[it.t]) it.t = RENOMEADOS[it.t]; })));
+  return st;
+}
+migrar(S);
 const modData = key => (S.mods[key] ||= construirMod(key));
 const mod = () => modData(S.mod);
 // Modalidades no cardápio: a principal primeiro, depois as combinadas
@@ -1094,7 +1101,7 @@ $("#saved").addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
   const id = b.closest(".saved-row").dataset.id, l = listaSalvos();
   if (b.dataset.o === "abrir") {
-    const it = l.find(x => x.id === id); S = JSON.parse(JSON.stringify(it.estado)); S.adic ||= []; persistir(); renderTudo();
+    const it = l.find(x => x.id === id); S = migrar(JSON.parse(JSON.stringify(it.estado))); persistir(); renderTudo();
     $("#ov").hidden = true; toast(`Aberto: ${it.titulo}`);
   } else if (b.dataset.o === "del") {
     if (b.dataset.armed) { store.set(K_SALVOS, l.filter(x => x.id !== id)); if (S.id === id) S.id = null; atualizarSalvos(); abrirLista(); }
