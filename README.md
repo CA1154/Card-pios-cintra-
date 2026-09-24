@@ -5,7 +5,7 @@ Página para montar cardápios personalizados com a identidade da Cintra Eventos
 ## Como usar
 
 1. Acesse **https://ca1154.github.io/Card-pios-cintra-/** (ou abra `index.html` no navegador) (Chrome, Edge ou Safari). É preciso ter internet, porque as fontes e o gerador de PDF são carregados online.
-2. Escolha a **modalidade** principal: Churrasco, Comida de Boteco, Jantar Convencional ou Cardápio Especial (montado do zero). Em **Combinar com outra modalidade**, dá para juntar outras no mesmo cardápio. Com **Como sugestão** ligado, a modalidade extra aparece no PDF como "Sugestão para complementar", com valor próprio se quiser. Desligado, ela entra no título como parte do cardápio (ex.: "Churrasco & Comida de Boteco").
+2. Escolha a **modalidade** principal: Churrasco, Comida de Boteco, Jantar Convencional, Pizzas, Massas, Crepes, Feijoada, Comida Caipira ou Cardápio Especial (montado do zero). Em **Combinar com outra modalidade**, dá para juntar outras no mesmo cardápio. Com **Como sugestão** ligado, a modalidade extra aparece no PDF como "Sugestão para complementar", com valor próprio se quiser. Desligado, ela entra no título como parte do cardápio (ex.: "Churrasco & Comida de Boteco").
 3. Preencha **cliente e evento**. Um campo deixado em branco ou marcado como **A definir** aparece no PDF como "A definir".
 4. Em **Itens do cardápio**, toque num item para colocar ou tirar do cardápio:
    - azul-marinho: está no cardápio;

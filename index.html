@@ -234,6 +234,7 @@ details.card[open] summary{margin-bottom:14px}
 .its{margin:6px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:1fr;row-gap:2px;text-align:center;font-size:13.5px;line-height:1.5}
 .its.c2{grid-template-columns:1fr 1fr;column-gap:26px}
 .its li{overflow-wrap:anywhere}
+.its strong{font-weight:800;color:var(--p-navy)}
 .val{margin-top:4px;border:1px solid var(--p-gold);background:var(--p-cream);padding:14px 20px;text-align:center}
 .val .l{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--p-gold-d);font-weight:800}
 .val .v{font-family:var(--serif);font-size:34px;font-weight:700;color:var(--p-navy);line-height:1.15}
@@ -390,11 +391,11 @@ const CAT = {
         sug: ["Cupim", "Maminha", "Costela bovina fogo de chão", "Prime rib", "Chorizo", "Denver steak"] },
       { id: "aves", titulo: "Aves e suínos",
         itens: ["Tulipa de frango", "Costela suína", "Coração de frango"],
-        outros: ["Sobrecoxa desossada"],
+        outros: ["Sobrecoxa desossada", "Coxinha da asa"],
         sug: ["Pernil suíno", "Lombo suíno com ervas", "Medalhão de frango com bacon", "Linguiça toscana"] },
       { id: "guarn", titulo: "Guarnições",
         itens: ["Arroz biro-biro", "Farofa nobre especial", "Vinagrete"],
-        outros: ["Arroz branco", "Mini pão filãozinho"],
+        outros: ["Arroz branco", "Arroz à primavera", "Mini pão filãozinho"],
         sug: ["Arroz carreteiro", "Mandioca cozida na manteiga", "Batata rústica", "Feijão tropeiro", "Maionese de batata"] },
       { id: "saladas", titulo: "Saladas",
         itens: ["Mix de folhas com tomate seco, raspas de parmesão e tomatinhos cereja"],
@@ -402,6 +403,7 @@ const CAT = {
         sug: ["Salpicão de frango", "Salada caprese", "Tabule", "Salada de palmito"] },
       { id: "sobremesa", titulo: "Sobremesa",
         itens: ["Banana assada com sorvete de creme, mel e canela"],
+        outros: ["Abacaxi e melancia"],
         sug: ["Abacaxi assado com canela", "Pudim de leite condensado", "Mousse de maracujá", "Doce de leite com queijo"] },
       { id: "bebidas", titulo: "Bebidas", nota: "Não alcoólicas",
         itens: ["Refrigerantes (normais e diet)", "Água com e sem gás"],
@@ -409,7 +411,7 @@ const CAT = {
         sug: ["Sucos naturais", "Chope", "Caipirinhas"] },
       { id: "utens", titulo: "Utensílios",
         itens: ["Utensílios para elaboração do evento", "Pratos", "Talheres", "Taças e copos"],
-        outros: ["Guardanapos", "Carvão", "Bandejas", "Réchauds"] },
+        outros: ["Guardanapos", "Carvão", "Bandejas", "Travessas", "Réchauds"] },
       { id: "mao", titulo: "Mão de obra", nota: "Todos devidamente uniformizados",
         itens: ["Churrasqueiro", "Ajudantes"],
         outros: ["Cozinheiro(a)", "Garçons"] },
@@ -494,6 +496,122 @@ const CAT = {
         sug: ["Maître", "Barman", "Copeira"] },
     ],
   },
+  pizzas: {
+    nome: "Pizzas", resumo: "Mais de 20 sabores, salgados e doces",
+    intro: "Entre as nossas opções de buffet, também trabalhamos com pizzas! São mais de 20 sabores diferentes, entre salgados e doces, para você escolher e montar o cardápio como desejar. A mão de obra e os materiais utilizados estão inclusos no orçamento.",
+    secoes: [
+      { id: "salgadas", titulo: "Pizzas salgadas", nota: "Escolha os sabores do seu evento",
+        itens: ["Mussarela: mussarela e tomate", "Calabresa: mussarela, calabresa e tomate", "Calabresa acebolada: cebola, calabresa, tomate e azeitonas", "Rúcula com tomate seco: mussarela, rúcula e tomate seco", "Palmito: mussarela, palmito, tomate e azeitonas", "Quatro queijos: mussarela, gorgonzola, catupiry e cheddar", "Abobrinha: mussarela, abobrinha e parmesão", "Abobrinha com bacon: mussarela, abobrinha, bacon e parmesão", "Brócolis: brócolis, mussarela, laminados de alho, tomate e azeitonas", "Escarola: escarola, mussarela e parmesão", "Escarola com bacon: escarola, mussarela, bacon e parmesão", "Frango com catupiry: frango desfiado, mussarela, tomate e azeitonas", "Milho com catupiry", "Bacon com milho: mussarela, bacon, milho e catupiry", "Peito de peru: mussarela, peito de peru, azeitonas e tomate", "Lombinho com catupiry: mussarela, lombinho, tomate e azeitonas", "Pepperoni ao sugo: calabresa, pimenta calabresa, cebola, tomate e azeitonas", "Portuguesa: presunto, mussarela, palmito, ovos cozidos, ervilha, tomate, cebola e azeitonas", "Napolitana: mussarela, tomate, azeitonas e parmesão", "Três queijos: mussarela, catupiry e parmesão", "Presunto com mussarela: presunto, mussarela, tomate e azeitonas", "Aliche: mussarela, aliche, parmesão, tomate e azeitonas", "Marguerita: mussarela, tomate, azeitonas, manjericão e parmesão"],
+        sug: ["Carne seca com catupiry e cebola roxa", "Costela desfiada com barbecue", "Parma com rúcula e parmesão", "Camarão com catupiry", "Vegetariana: legumes grelhados e mussarela de búfala"] },
+      { id: "doces", titulo: "Pizzas doces",
+        itens: ["Brigadeiro: chocolate, granulado e leite condensado", "Morango: chocolate, morango e leite condensado", "Morango com chocolate branco: chocolate branco, morango e leite condensado", "Kiwi: chocolate branco, kiwi e leite condensado", "Banana: banana com canela", "Maracujá: chocolate branco com maracujá", "Romeu e Julieta: mussarela com goiabada", "Oreo: chocolate branco com pedaços de biscoito Oreo"],
+        sug: ["Nutella com morango", "Prestígio: chocolate e coco", "Doce de leite com coco", "Churros: doce de leite, açúcar e canela"] },
+      { id: "bebidas", titulo: "Bebidas", on: false, itens: [],
+        sug: ["Refrigerantes (normais e diet)", "Água com e sem gás", "Sucos naturais", "Cerveja (marca e quantidade a combinar)"] },
+      { id: "utens", titulo: "Materiais",
+        itens: ["Guardanapos", "Forno", "Utensílios para pizza"] },
+      { id: "mao", titulo: "Mão de obra", nota: "Todos devidamente uniformizados",
+        itens: ["Pizzaiolo", "2 (duas) garçonetes para servir as pizzas"],
+        outros: ["Ajudantes"] },
+    ],
+  },
+  massas: {
+    nome: "Massas", resumo: "Estilo “Spoleto”, montadas na hora",
+    intro: "No nosso buffet de massas, você escolhe as opções de massa e os molhos que serão servidos, e cada convidado monta o seu prato com os ingredientes preferidos. Todos os materiais e a equipe especializada estão inclusos no orçamento.",
+    secoes: [
+      { id: "entradas", titulo: "Entradas",
+        itens: ["Mesa de saladas montadas e decoradas", "Patês e torradas"],
+        sug: ["Bruschettas de tomate e manjericão", "Antepasto de berinjela", "Pães italianos"] },
+      { id: "massas", titulo: "Massas", nota: "Estilo “Spoleto”, montadas na hora",
+        itens: ["Spaghetti", "Talharim", "Penne", "Nhoque", "Ravióli", "Conchiglione recheado"],
+        sug: ["Fettuccine", "Fusilli", "Tortei de abóbora", "Rondelli de quatro queijos"] },
+      { id: "ingred", titulo: "Ingredientes para combinar", nota: "Preparados conforme a escolha de cada convidado",
+        itens: ["Bacon", "Milho", "Calabresa", "Presunto", "Peito de peru", "Lombinho", "Carne moída", "Mussarela", "Gorgonzola", "Parmesão", "Provolone", "Alho", "Cheiro-verde", "Cebola", "Orégano", "Manjericão", "Alcaparras", "Champignon", "Azeitonas pretas e verdes", "Manteiga e azeite"],
+        sug: ["Frango desfiado", "Tomate cereja", "Tomate seco", "Brócolis", "Rúcula", "Camarão"] },
+      { id: "molhos", titulo: "Molhos",
+        itens: ["Branco", "Vermelho", "Rosé"],
+        sug: ["Pesto de manjericão", "Quatro queijos", "Bolonhesa", "Alho e óleo"] },
+      { id: "bebidas", titulo: "Bebidas",
+        itens: ["Refrigerantes: Coca-Cola e Guaraná (normais e diet)", "Água com e sem gás"],
+        outros: ["Cerveja Skol ou Brahma (quantidade a combinar)"],
+        sug: ["Sucos naturais", "Vinho tinto da casa"] },
+      { id: "utens", titulo: "Utensílios",
+        itens: ["Pratos de louça branca", "Talheres de inox", "Guardanapos", "Pegadores", "Espagueteiras"] },
+      { id: "mao", titulo: "Mão de obra", nota: "Todos devidamente uniformizados",
+        itens: ["Cozinheiro", "Ajudantes"],
+        outros: ["Garçons"] },
+    ],
+  },
+  crepes: {
+    nome: "Crepes", resumo: "Sabores salgados e doces",
+    intro: "Servimos diversas opções de crepes salgados e doces, preparados na hora. Os utensílios utilizados no preparo e toda a mão de obra estão inclusos no orçamento.",
+    secoes: [
+      { id: "entradas", titulo: "Entradas",
+        itens: ["Mesa montada com mix de saladas decoradas", "Frios", "Patês e torradas"],
+        sug: ["Bruschettas", "Queijos variados"] },
+      { id: "salgados", titulo: "Crepes salgados",
+        itens: ["Calabresa", "Frango com catupiry", "Brócolis com ricota", "À portuguesa", "Quatro queijos", "Presunto com palmito", "Milho com catupiry", "Cheddar com champignon", "Lombinho com catupiry", "Escarola com bacon"],
+        sug: ["Carne seca com catupiry", "Strogonoff de frango", "Tomate seco, rúcula e mussarela de búfala", "Peito de peru com cream cheese"] },
+      { id: "doces", titulo: "Crepes doces",
+        itens: ["Brigadeiro", "Morango com chocolate branco", "Romeu e Julieta", "Banana com canela", "Kiwi com chocolate branco"],
+        sug: ["Nutella com morango", "Doce de leite", "Prestígio (chocolate e coco)"] },
+      { id: "bebidas", titulo: "Bebidas", on: false, itens: [],
+        sug: ["Refrigerantes (normais e diet)", "Água com e sem gás", "Sucos naturais"] },
+      { id: "utens", titulo: "Utensílios",
+        itens: ["Utensílios para o preparo dos crepes"],
+        outros: ["Pratos", "Talheres", "Guardanapos"] },
+      { id: "mao", titulo: "Mão de obra", nota: "Todos devidamente uniformizados",
+        itens: ["Crepeiro", "Garçons", "Ajudantes"] },
+    ],
+  },
+  feijoada: {
+    nome: "Feijoada", resumo: "Feijoada completa e acompanhamentos",
+    intro: "A tradicional feijoada completa, servida com todos os acompanhamentos. Uma opção farta e saborosa para almoços, aniversários e confraternizações.",
+    secoes: [
+      { id: "entradas", titulo: "Entradas",
+        itens: ["Mandioca frita", "Torresmo à pururuca"],
+        sug: ["Caldinho de feijão", "Linguiça acebolada", "Bolinho de feijoada"] },
+      { id: "principal", titulo: "Prato principal",
+        itens: ["Feijoada completa"],
+        sug: ["Feijoada light", "Feijão vegetariano com legumes"] },
+      { id: "acomp", titulo: "Acompanhamentos",
+        itens: ["Arroz", "Vinagrete", "Farofa rica", "Couve refogada"],
+        sug: ["Laranja em rodelas", "Banana à milanesa", "Bisteca suína"] },
+      { id: "sobremesa", titulo: "Sobremesa",
+        itens: ["Abacaxi com raspas de limão e sorvete de creme"],
+        sug: ["Doce de leite com queijo", "Pudim de leite condensado"] },
+      { id: "bebidas", titulo: "Bebidas", on: false, itens: [],
+        sug: ["Caipirinhas", "Refrigerantes (normais e diet)", "Água com e sem gás", "Cerveja (marca e quantidade a combinar)"] },
+      { id: "utens", titulo: "Utensílios", on: false, itens: [],
+        outros: ["Pratos", "Talheres", "Réchauds", "Guardanapos"] },
+      { id: "mao", titulo: "Mão de obra",
+        itens: ["Cozinheiro", "Ajudante"] },
+    ],
+  },
+  caipira: {
+    nome: "Comida Caipira", resumo: "Sabores da roça",
+    intro: "Os sabores da cozinha do interior, com pratos fartos e tradicionais da culinária caipira, para uma festa acolhedora e cheia de sabor.",
+    secoes: [
+      { id: "entradas", titulo: "Entradas",
+        itens: ["Torresmo", "Mandioca frita", "Polenta frita", "Calabresa", "Caldo de feijão preto com especiarias"],
+        sug: ["Pastel de angu", "Bolinho caipira", "Pamonha"] },
+      { id: "principal", titulo: "Pratos principais",
+        itens: ["Pernil assado ou leitoa à pururuca", "Vaca atolada", "Arroz com galinha ao açafrão", "Escondidinho de moranga com carne seca"],
+        sug: ["Frango caipira ao molho", "Costelinha suína com mandioca"] },
+      { id: "acomp", titulo: "Acompanhamentos",
+        itens: ["Feijão de corda", "Tutu de feijão", "Couve à mineira", "Quiabo refogado", "Mandioca frita", "Arroz branco", "Banana empanada"],
+        sug: ["Farofa de torresmo", "Angu"] },
+      { id: "sobremesa", titulo: "Sobremesa",
+        itens: ["Doce de leite", "Doce de abóbora", "Goiabada com queijo"],
+        sug: ["Arroz-doce", "Canjica", "Curau"] },
+      { id: "bebidas", titulo: "Bebidas", on: false, itens: [],
+        sug: ["Quentão", "Refrigerantes (normais e diet)", "Água com e sem gás", "Sucos naturais"] },
+      { id: "utens", titulo: "Material",
+        itens: ["Guardanapos descartáveis", "Carvão", "Baixelas", "Réchauds", "Travessas", "Talheres de inox", "Pratos de louça"] },
+      { id: "mao", titulo: "Mão de obra", nota: "Todos devidamente uniformizados", on: false,
+        itens: ["Cozinheiro(a)", "Ajudantes"] },
+    ],
+  },
   livre: {
     nome: "Cardápio Especial", resumo: "Monte do zero, seção a seção",
     intro: "Um cardápio montado sob medida para o seu evento, com pratos escolhidos a dedo e equipe qualificada para cuidar de cada detalhe.",
@@ -510,6 +628,8 @@ const CAT = {
 };
 
 const CONDICOES = [
+  "Crianças de 0 a 5 anos não pagam (limitado a 20% do total de convidados).",
+  "Crianças de 6 a 11 anos pagam metade do preço (limitado a 20% do total de convidados).",
   "Duração do evento: 4 horas.",
   "Hora adicional: 20% sobre o valor contratado.",
   "Caso o número de convidados ultrapasse o previsto em contrato, será cobrado valor adicional por pessoa excedente.",
@@ -819,13 +939,18 @@ function paginaInterna() {
     <img class="in-tal" src="${TALHERES}" alt="">
   </section>`);
 }
+// "Calabresa: mussarela e tomate" -> nome em destaque + descrição
+function itemHTML(t) {
+  const k = t.indexOf(": ");
+  return k > 0 && k < 40 ? `<strong>${esc(t.slice(0, k))}</strong> · ${esc(t.slice(k + 2))}` : esc(t);
+}
 function blocoSecao(s) {
   const its = s.itens.filter(i => i.on);
   const c2 = its.length >= 6 && its.every(i => i.t.length <= 38);
   return html(`<div class="blk sec">
     <div class="sec-h"><span class="rule"></span><h3>${esc(s.titulo)}</h3><span class="rule"></span></div>
     ${s.nota.trim() ? `<div class="sec-n">${esc(s.nota)}</div>` : ""}
-    <ul class="its ${c2 ? "c2" : ""}">${its.map(i => `<li>${esc(i.t)}</li>`).join("")}</ul>
+    <ul class="its ${c2 ? "c2" : ""}">${its.map(i => `<li>${itemHTML(i.t)}</li>`).join("")}</ul>
   </div>`);
 }
 function blocoTitulo(t) { return html(`<div class="blk sec"><div class="sec-h"><span class="rule"></span><h3>${esc(t)}</h3><span class="rule"></span></div></div>`); }
